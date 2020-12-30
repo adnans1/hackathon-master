@@ -36,14 +36,19 @@ def game(connectionSocket,addr):
         except:
             h=False
             connectionSocket.close()
+            arr.clear()
+            group1.clear()
+            group2.clear()
+            group1_connection_addr.clear()
+            group2_connection_addr.clear()
+            point_group1=0
+            point_group2=0
             break
         if (x=="1"):
             if((connectionSocket,addr) in group1_connection_addr):
                 point_group1=point_group1+1
-                print("one point")
             else:
                 point_group2=point_group2+1
-                print("one point from anthor")
         else:
             if((connectionSocket,addr) in group1_connection_addr):
                 point_group1=point_group1+1
@@ -63,7 +68,7 @@ def print_wins():
         for x in group2:
             print(x)   
     else:
-       print("Drow")  
+       print("Draw")
 
 
 def randomteam():
@@ -75,8 +80,3 @@ def randomteam():
         else:
             group2.append(i)
             group2_connection_addr.append((k,j))
-
-
-  
-
-
