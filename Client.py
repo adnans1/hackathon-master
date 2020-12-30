@@ -1,13 +1,13 @@
 from socket import *
-from pynput.keyboard import Listener
-import threading
+import getch
 
 
 serverPort=0
+press=True
 
 def UDPClinet():
     global serverPort
-    serverName = '192.168.56.1'
+    serverName = ""
     serverPort = 13117
     clientSocket = socket(AF_INET,SOCK_DGRAM)
     clientSocket.setsockopt(SOL_SOCKET,SO_BROADCAST,1)
@@ -23,38 +23,33 @@ def UDPClinet():
 
 
 def TCPClinet():
-    serverName = '192.168.56.1'
+    serverName = "172.1.0.75"
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName,serverPort))
     team_name="FCB"
     clientSocket.send(team_name.encode())
     modifiedSentence = clientSocket.recv(1024)
     print (modifiedSentence.decode())
-
-    
-    with Listener() as listener:
-        listener.on_press = on_press(listener, clientSocket)
-        listener.join()
+  
+    thread_key = threading.Thread(target=_t).start()
+    socket_close_thread = threading.Thread(target=_press).start() 
 
     print("Server disconnected, listening for offer requests...")
+
+
+
+def _t():
+    while press:
+        a= getch.getch()
+        clientSocket.send(a.encode())
+    
     
 
-
-
-def on_press(listener, clientSocket):
-    def _t():
-        while True:
-            try:
-                clientSocket.recv(1)
-            except:
-                listener.stop()
-                break
-    t = threading.Thread(target=_t).start()
-
-    def _press(key):
-        print(key)
-        clientSocket.send("1".encode())
-    return _press
+def _press():
+    while(True):
+        if(not clientSocket.connect()):
+            press=False
+            break
 
 
 if __name__ == "__main__":
