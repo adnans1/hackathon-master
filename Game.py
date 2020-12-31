@@ -75,18 +75,20 @@ def game(connectionSocket,addr):
 
 #Prints the winner(with colors ofcourse :) ).
 def print_wins():
-    print(bcolors.OKCYAN+"Game over!\nGroup 1 typed in {} characters."+bcolors.FAIL+" Group 2 typed in {} characters.\n".format(point_group1,point_group2)+ bcolors.ENDC)
+    msg=""
+    msg=msg+("Game over!\nGroup 1 typed in {} characters. Group 2 typed in {} characters.\n".format(point_group1,point_group2))
     if(point_group1>point_group2):
-        print(bcolors.OKBLUE+"Group 1 wins!\nCongratulations to the winners:\n=="+bcolors.ENDC)
+        msg=msg+(bcolors.OKBLUE+"Group 1 wins!\nCongratulations to the winners:\n==\n"+bcolors.ENDC)
         for x in group1:
-            print(x)
+            msg=msg+(x)
 
     elif(point_group2>point_group1):
-        print(bcolors.FAIL+"Group 2 wins!\nCongratulations to the winners:\n=="+ bcolors.ENDC)
+        msg=msg+(bcolors.FAIL+"Group 2 wins!\nCongratulations to the winners:\n==\n"+ bcolors.ENDC)
         for x in group2:
-            print(x)   
+            msg=msg+(x)   
     else:
-       print(bcolors.BOLD+"Draw"+ bcolors.ENDC)
+       msg=msg+(bcolors.BOLD+"Draw"+ bcolors.ENDC)
+    return msg
 
 
 #Splits the teams in a random manner.

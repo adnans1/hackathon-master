@@ -33,7 +33,7 @@ def UDPServer(interface=Scapy.conf.iface):
     message_bytes.extend(bytes.fromhex("feedbeef"))
     message_bytes.extend([2])
     message_bytes.extend(TCPPort.to_bytes(2,'little'))
-    print("Server started, listening on IP address " + gethostbyname(gethostname()))
+    print("Server started, listening on IP address " + get_ip(interface))
     for i in range(10):
         try:
             serverSocket.sendto(bytes(message_bytes), ('<broadcast>', serverport))
@@ -45,7 +45,11 @@ def UDPServer(interface=Scapy.conf.iface):
     for (x,y) in clientsoket :
         gamethread=threading.Thread(target = Game.game,args=(x,y)).start()
     time.sleep(10)
-    Game.print_wins()
+    msg=Game.print_wins()
+    print(msg)
+    for (a,b) in clientsoket:
+        a.send(msg.encode())
+    time.sleep(2)
     serverSocket.close()
     for (a,b) in clientsoket:
         a.close()

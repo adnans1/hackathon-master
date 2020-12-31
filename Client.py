@@ -32,7 +32,7 @@ def UDPClinet():
     if((modifiedMessage[0]==254)& (modifiedMessage[1]==237)&(modifiedMessage[2]==190)&(modifiedMessage[3]==239)):	
         port=[modifiedMessage[5],modifiedMessage[6]]
         serverPorttcp=int.from_bytes(port,'little')
-        print (bcolors.OKGREEN + "Received offer from "+ serverName +",attempting to connect...")
+        print (bcolors.OKGREEN + "Received offer from "+ serverAddress[0] +",attempting to connect...")
         clientSocket.close()
         return serverAddress[0],serverPorttcp
     else:
@@ -47,7 +47,6 @@ def UDPClinet():
 def TCPClinet(server_ip,server_port):
     serverName =  server_ip
     serverPorttcp = server_port
-
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName,serverPorttcp))
     team_name="FCB"
@@ -59,7 +58,6 @@ def TCPClinet(server_ip,server_port):
     print (modifiedSentence.decode())
     end=time.time()+10
     flag = True
-    clientSocket.settimeout(10)
     while ((time.time() < end) & flag) :        
         if msvcrt.kbhit():
             char= msvcrt.getch()
@@ -69,7 +67,8 @@ def TCPClinet(server_ip,server_port):
                 clientSocket.send(pKey.encode())
             except:
                 flag = False
-
+    msg = clientSocket.recv(1024)
+    print (msg.decode())
     print("Server disconnected, listening for offer requests...")
     
 
