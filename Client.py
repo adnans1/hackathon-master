@@ -7,7 +7,7 @@ import threading
 serverPorttcp=0
 
 def UDPClinet():
-    serverName = '192.168.56.1'
+    serverName = '192.168.1.15'
     serverPort = 13117
     clientSocket = socket(AF_INET,SOCK_DGRAM)
     clientSocket.setsockopt(SOL_SOCKET,SO_BROADCAST,1)
@@ -22,7 +22,7 @@ def UDPClinet():
 
 
 def TCPClinet():
-    serverName = '192.168.56.1'
+    serverName = '192.168.1.15'
     serverPorttcp = 2020
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName,serverPorttcp))

@@ -38,7 +38,7 @@ def TCPServer() :
     serverPort = 2020
     serverSocket = socket(AF_INET,SOCK_STREAM)
     serverSocket.settimeout(10)
-    serverSocket.bind(('192.168.56.1',serverPort))
+    serverSocket.bind(('192.168.1.15',serverPort))
     TCPPort=serverSocket.getsockname()[1]
     serverSocket.listen(1)
     client_arr=[]
