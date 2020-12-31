@@ -1,13 +1,28 @@
 from socket import *
-#from pynput.keyboard import Listener
 import time
 import msvcrt
 import threading
 
+
 serverPorttcp=0
 
+#Colors
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+#UDP Server client side.
+#Simple UDP Client function, that listens to the server and prints the messages from the server side. 
 def UDPClinet():
-    serverName = '192.168.1.15'
+    serverName = ''
     serverPort = 13117
     clientSocket = socket(AF_INET,SOCK_DGRAM)
     clientSocket.setsockopt(SOL_SOCKET,SO_BROADCAST,1)
@@ -17,20 +32,28 @@ def UDPClinet():
     if((modifiedMessage[0]==254)& (modifiedMessage[1]==237)&(modifiedMessage[2]==190)&(modifiedMessage[3]==239)):	
         port=[modifiedMessage[5],modifiedMessage[6]]
         serverPorttcp=int.from_bytes(port,'little')
-    print ("Received offer from "+ serverName +",attempting to connect...")
-    clientSocket.close()
+        print (bcolors.OKGREEN + "Received offer from "+ serverName +",attempting to connect...")
+        clientSocket.close()
+        return serverAddress[0],serverPorttcp
+    else:
+        return UDPClient()
 
 
-def TCPClinet():
-    serverName = '192.168.1.15'
-    serverPorttcp = 2020
+
+#TCP Server client side 
+#This is where the game happen, the client press on the key and we print and claculate how many.
+#inputs the user inserted, we do that in the while loop, it takes 10 seconeds for the player to enter the code.
+#*since the msvcrt.getch() is blocking function we used "if msvcrt.kbhit()".
+def TCPClinet(server_ip,server_port):
+    serverName =  server_ip
+    serverPorttcp = server_port
+
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName,serverPorttcp))
     team_name="FCB"
     clientSocket.send(team_name.encode())
     modifiedSentence = clientSocket.recv(1024)
     print (modifiedSentence.decode())
-#cahnfge
     end=time.time()+10
     flag = True
     clientSocket.settimeout(10)
@@ -48,8 +71,8 @@ def TCPClinet():
     
 
 
-
+#main function with a while loop that runs the client sides.
 if __name__=='__main__':
     while(True):
-        UDPClinet()
-        TCPClinet()
+        server_ip,server_port=UDPClinet()
+        TCPClinet(server_ip,server_port)

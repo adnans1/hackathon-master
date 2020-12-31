@@ -2,7 +2,6 @@ from socket import *
 import random
 
 
-
 arr=[]
 group1=[]
 group2=[]
@@ -11,23 +10,35 @@ group2_connection_addr=[]
 point_group1=0
 point_group2=0
 
+#Colors
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
+#recieve and saves the team names in a tuple.
 def team_name(connectionSocket,addr): 
     team_name=connectionSocket.recv(1024)
     arr.append((team_name.decode(),connectionSocket,addr))
 
-
+#starts the game, sends messages to the clients of their names, and notes them to start the game.
 def game(connectionSocket,addr):
     global point_group1
     global point_group2
     msg="Welcome to Keyboard Spamming Battle Royale.\n"
-    msg=msg+"Group 1:\n==\n"
+    msg=msg+bcolors.OKBLUE + "Group 1:\n==\n"
     for x in group1:
         msg=msg+x+"\n"
-    msg=msg+"Group 2:\n==\n"
+    msg=msg+bcolors.FAIL +"Group 2:\n==\n"
     for y in group2:
         msg=msg+y+"\n"
-    msg=msg+"Start pressing keys on your keyboard as fast as you can!!\n"
+    msg=msg+bcolors.WARNING+"Start pressing keys on your keyboard as fast as you can!!\n"
     connectionSocket.send(msg.encode())
     h=True
     while(h):
@@ -56,21 +67,23 @@ def game(connectionSocket,addr):
                 point_group2=point_group2+1
     
 
+#Prints the winner(with colors ofcourse :) ).
 def print_wins():
-    print("Game over!\nGroup 1 typed in {} characters. Group 2 typed in {} characters.\n".format(point_group1,point_group2))
+    print(bcolors.OKCYAN+"Game over!\nGroup 1 typed in {} characters."+bcolors.FAIL+" Group 2 typed in {} characters.\n".format(point_group1,point_group2)+ bcolors.ENDC)
     if(point_group1>point_group2):
-        print("Group 1 wins!\nCongratulations to the winners:\n==")
+        print(bcolors.OKBLUE+"Group 1 wins!\nCongratulations to the winners:\n=="+bcolors.ENDC)
         for x in group1:
             print(x)
 
     elif(point_group2>point_group1):
-        print("Group 2 wins!\nCongratulations to the winners:\n==")
+        print(bcolors.FAIL+"Group 2 wins!\nCongratulations to the winners:\n=="+ bcolors.ENDC)
         for x in group2:
             print(x)   
     else:
-       print("Draw")
+       print(bcolors.BOLD+"Draw"+ bcolors.ENDC)
 
 
+#Splits the teams in a random manner.
 def randomteam():
     for (i,k,j) in arr:
         x=int(random.random()*10)
