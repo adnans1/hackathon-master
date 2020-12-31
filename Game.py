@@ -24,7 +24,10 @@ class bcolors:
 
 #recieve and saves the team names in a tuple.
 def team_name(connectionSocket,addr): 
-    team_name=connectionSocket.recv(1024)
+    try:
+        team_name=connectionSocket.recv(1024)
+    except:
+        pass
     arr.append((team_name.decode(),connectionSocket,addr))
 
 #starts the game, sends messages to the clients of their names, and notes them to start the game.
@@ -39,7 +42,10 @@ def game(connectionSocket,addr):
     for y in group2:
         msg=msg+y+"\n"
     msg=msg+bcolors.WARNING+"Start pressing keys on your keyboard as fast as you can!!\n"
-    connectionSocket.send(msg.encode())
+    try:
+        connectionSocket.send(msg.encode())
+    except:
+        pass
     h=True
     while(h):
         try:

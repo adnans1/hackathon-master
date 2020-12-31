@@ -51,7 +51,10 @@ def TCPClinet(server_ip,server_port):
     clientSocket = socket(AF_INET, SOCK_STREAM)
     clientSocket.connect((serverName,serverPorttcp))
     team_name="FCB"
-    clientSocket.send(team_name.encode())
+    try:
+        clientSocket.send(team_name.encode())
+    except:
+        pass
     modifiedSentence = clientSocket.recv(1024)
     print (modifiedSentence.decode())
     end=time.time()+10
